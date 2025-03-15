@@ -1,0 +1,47 @@
+.book-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  .book-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .book-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .book-table th, .book-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .book-table thead {
+    background-color: #f4f4f4;
+  }
+  
+  .borrow-button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .borrow-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .borrow-button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  

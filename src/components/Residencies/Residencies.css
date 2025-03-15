@@ -11,7 +11,8 @@
     transition: all 300 ms ease-in;
 }
 .r-card img{
-    width: 100%;
+    /* width: 100%; */
+    width: 200px;
     max-width: 20rem;
 }
 .r-price{

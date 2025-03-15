@@ -1,38 +1,38 @@
 [
   {
-    "name": "Aliva Priva Jardin",
-    "price": "47,043",
-    "detail": "Jakarta Garden City Street, Cakung. Pulo Gadung, Jakarta Timur, DKI Jakarta",
-    "image": "./r1.png"
+    "name": "Rich Dad Poor Dad",
+    "price": "140",
+    "detail": "A personal finance classic that contrasts the mindset of the wealthy and the middle class ",
+    "image": "./r1.webp"
   },
   {
-    "name": "Asatti Garden City",
-    "price": "66,353",
-    "detail": "Pahlawan Street XVII No.215, Cinangka, Sawangan, Depok, Jawa Barat",
-    "image": "./r2.png"
+    "name": "The Alchemist",
+    "price": "100",
+    "detail": " A philosophical novel about following one's dreams, as a young shepherd embarks on a journey to discover his personal legend.",
+    "image": "./r2.webp"
   },
   {
-    "name": "Citralan Puri Serang",
-    "price": "35,853",
-    "detail": "Ruko Puri Indah Residence Block A7, Lingkar Street, Ciracas, Serang, Banten",
-    "image": "./r3.png"
+    "name": "Playing It My Way",
+    "price": "100",
+    "detail": "An inspiring autobiography of cricket legend Sachin Tendulkar, detailing his journey, struggles, and achievements in the sport.",
+    "image": "./r3.jpg"
   },
   {
-    "name": "Aliva Priva Jardin",
-    "price": "51,343",
-    "detail": "987 Sparkling Avenue Dreamsville, Imaginaria 98765 Wonderland",
+    "name": "Harry Potter",
+    "price": "150",
+    "detail": "A magical fantasy series following a young wizard, Harry Potter, as he discovers his destiny and battles the dark lord",
     "image": "./r4.jpg"
   },
   {
-    "name": "Asatti Garden City",
-    "price": "86,393",
-    "detail": "1234 Willow Street,Springfield, Imaginaria 54321 United States",
-    "image": "./r5.png"
+    "name": "The Last Outpost",
+    "price": "120",
+    "detail": "A gripping tale of survival and resilience,set in dystopian settings, where characters defend humanity’s final stronghold.",
+    "image": "./r5.jpg"
   },
   {
-    "name": "Citralan Puri Serang",
-    "price": "39,253",
-    "detail": "456 Enchanted Lane Fairyland,Imaginaria 12345 Magic Kingdom",
-    "image": "./r6.png"
+    "name": "Power of Your Subconscious Mind",
+    "price": "100",
+    "detail": " A self-help classic that explores how harnessing the subconscious mind can transform one’s life through positive thinking.",
+    "image": "./r6.webp"
   }
 ]

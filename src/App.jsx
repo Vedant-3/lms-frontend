@@ -17,6 +17,7 @@ import Home from "./pages/Home";
 import ContactUs from "./pages/ContactUs";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import BorrowPage from "./pages/BorrowPage";
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
           <Route path="/contactUs" element={<ContactUs />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register/>}></Route>
+          <Route path="/borrow/:id" element={<BorrowPage />} />
+
         </Routes>
       </Router>
 

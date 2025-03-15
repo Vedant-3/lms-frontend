@@ -39,8 +39,8 @@ const Hero = () => {
 
                     <div className="flexCenter stats">
                         <div className="flexColCenter stat">
-                            <span><CountUp start={8800} end={9000} duration={3.5} /><span className='plus'>+</span></span>
-                            <span className='secondaryText'>Premium Products</span>
+                            <span><CountUp start={800} end={900} duration={3.5} /><span className='plus'>+</span></span>
+                            <span className='secondaryText'>Wide Variety</span>
                         </div>
                         <div className="flexColCenter stat">
                             <span><CountUp start={1950} end={2000} duration={3.5} /><span className='plus'>+</span></span>

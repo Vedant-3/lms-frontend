@@ -1,0 +1,46 @@
+.borrow-container {
+    text-align: center;
+    padding: 30px;
+    max-width: 400px;
+    margin: auto;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .borrow-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .book-details {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .book-details p {
+    font-size: 16px;
+    margin: 8px 0;
+  }
+  
+  .confirm-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .confirm-button:hover {
+    background-color: #218838;
+  }
+  
+  .borrow-error {
+    text-align: center;
+    color: red;
+    font-size: 20px;
+  }
+  
