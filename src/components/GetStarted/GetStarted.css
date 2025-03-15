@@ -1,0 +1,30 @@
+.g-blue{
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    height: 13rem;
+    background: var(--blue);
+    border-radius: 10px ;
+    border: 6px solid #5d77d6;
+}
+.g-title{
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+}
+.g-desc{
+    color:rgba(255,255,255,0.587);
+}
+.g-btn{
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    border: 2px solid white;
+    background-color: #5d77d6;
+    color: white;
+    transition: all 200ms ease-in ;
+}
+.g-btn:hover{
+    scale:1.1;
+}

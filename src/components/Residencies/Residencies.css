@@ -1,0 +1,48 @@
+.r-container{
+    overflow: hidden;
+    position: relative;
+}
+.r-card{
+    gap:0.2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    max-width: max-content;
+    margin: auto;
+    transition: all 300 ms ease-in;
+}
+.r-card img{
+    width: 100%;
+    max-width: 20rem;
+}
+.r-price{
+    font-size: 1.3rem;
+}
+.r-card:hover{
+    scale:1.01 ;
+    cursor: pointer;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0),
+        rgba(136,160,255,0.46)
+    );
+    box-shadow: 0px 72px 49px -51px rgba(136,160,255,0.2);
+}
+.swiper-horizontal{
+    overflow: visible;
+}
+
+/* .r-button{
+    position: absolute; 
+    gap: 1rem;
+    top:-4rem;
+    right: 1rem;
+} */
+.r-button button{
+    font-size: 1.2rem;
+    padding: 0.2rem 0.8rem;
+    color: blue;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}

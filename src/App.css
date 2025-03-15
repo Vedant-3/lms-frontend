@@ -1,0 +1,15 @@
+.App{
+    position: relative;
+}
+.App>:nth-child(1){
+    position: relative;
+    /* background: var(--black); */
+}
+.white-gradient{
+    position: absolute;
+    height: 20rem;
+    width: 20rem;
+    background: rgba(255,255,255,0.5);
+    filter: blur(100px);
+    border-radius: 50%;
+}

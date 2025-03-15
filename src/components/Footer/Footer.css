@@ -1,0 +1,13 @@
+.f-left{
+    margin-right: 15rem;
+}
+.f-menu>span{
+    margin-right: 2rem;
+}
+.f-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+.f-wrapper{
+    margin-bottom: 1rem;
+}

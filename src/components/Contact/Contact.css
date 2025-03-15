@@ -1,0 +1,65 @@
+.c-container {
+    justify-content: space-between;
+}
+
+.c-container>div {
+    flex: 1;
+}
+
+.image-container img {
+    width: 28rem;
+    height: 33rem;
+}
+
+.c-left {
+    gap: 0.5rem;
+}
+
+.contactModes{
+    margin-top: 2rem;
+    gap:1rem;
+}
+.mode{
+    width: 16rem;
+    padding: 1rem;
+    transition: all 200ms ease-in;
+}
+.c-button{
+    width: 100%;
+    background: var(--lightBlue);
+    color:var(--blue);
+}
+.c-button:hover{
+    background: var(--blue-gradient);
+    color: white;
+}
+.mode>:nth-child(1){
+    width: 100%;
+    gap:1.6rem;
+    margin-bottom: 10px;
+}
+.mode .detail .primaryText{
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.mode:hover{
+    scale:1.1;
+    box-shadow: var(--shadow);
+}
+.row{
+    margin-right: 5rem;
+    margin-left: 5rem;
+}
+
+.c1{
+    margin: auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.426);
+    /* border-right: 1px solid grey; */
+    border-radius: 10%;
+    /* padding: 0.5rem; */
+}
+.r1{
+    /* background-color: aqua; */
+    /* display: flex; */
+    gap:20px
+}
