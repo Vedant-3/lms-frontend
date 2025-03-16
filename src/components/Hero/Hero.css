@@ -27,12 +27,12 @@
 }
 
 .hero-desc>span {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .hero-title>h1 {
     font-weight: 600;
-    font-size: 4rem;
+    font-size: 3.7rem;
     line-height: 4rem;
 }
 
@@ -51,7 +51,7 @@
     background-color: white;
     border-radius: 5px;
     border: 3px solid rgba(120, 120, 120, 0.4);
-    padding: 0.4rem 1rem;
+    padding: 0.2rem 0.5rem;
     justify-content: space-between;
     width: 100%;
 }

@@ -58,17 +58,42 @@
 // };
 
 // export default BookList;
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./BookList.css";
 
 const BookList = () => {
   const navigate = useNavigate();
-  const [books] = useState([
-    { id: 1, name: "Hibernate Core ~11th", author: "John Doe", price: 499, quantity: 5 },
-    { id: 2, name: "React Essentials", author: "Jane Smith", price: 799, quantity: 2 },
-    { id: 3, name: "Node.js Mastery", author: "Alex Johnson", price: 599, quantity: 0 },
-  ]);
+  // const [books] = useState([
+  //   { id: 1, name: "Hibernate Core ~11th", author: "John Doe", price: 499, quantity: 5 },
+  //   { id: 2, name: "React Essentials", author: "Jane Smith", price: 799, quantity: 2 },
+  //   { id: 3, name: "Node.js Mastery", author: "Alex Johnson", price: 599, quantity: 0 },
+  // ]);
+
+  const [books, setBooks] = useState([]);
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const token = localStorage.getItem("token"); // Retrieve token from localStorage
+                const response = await axios.get(
+                    "http://localhost:8080/api/books",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                setBooks(response.data);
+            } catch (err) {
+                setError("Failed to load books");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBooks();
+    }, []);
 
   const handleBorrow = (id) => {
     navigate(`/borrow/${id}`);
@@ -92,7 +117,7 @@ const BookList = () => {
           {books.map((book) => (
             <tr key={book.id}>
               <td>{book.id}</td>
-              <td>{book.name}</td>
+              <td>{book.title}</td>
               <td>{book.author}</td>
               <td>₹{book.price}</td>
               <td>{book.quantity}</td>
