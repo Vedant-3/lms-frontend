@@ -29,7 +29,7 @@ const Residencies=()=>{
                                     </span>
 
                                     <span className='primaryText'>{card.name}</span>
-                                    <span className='secondaryText' style={{width:'15rem'}}>{card.detail}</span>
+                                    <span className='secondaryText' style={{width:'15rem'}}>{card.detail.length>80 ? `${card.detail.slice(0, 80)}...`: card.detail}</span>
 
                                 </div>
                             </SwiperSlide>

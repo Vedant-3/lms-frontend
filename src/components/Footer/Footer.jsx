@@ -12,7 +12,7 @@ const Footer = () => {
 
                 <div className="flexColStart f-right">
                     <span className="primaryText">Information</span>
-                    <span className="secondaryText">BookHive Library, SV Road, Andheri West, Mumbai</span>
+                    <span className="secondaryText">BookHive Library, Viman Nagar, Pune</span>
 
                     <div className="f-menu">
                         <span><Link to='/'>Home</Link></span>
