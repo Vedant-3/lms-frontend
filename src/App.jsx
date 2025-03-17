@@ -18,6 +18,8 @@ import ContactUs from "./pages/ContactUs";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import BorrowPage from "./pages/BorrowPage";
+import { CartProvider } from "./context/CartContext";
+import Checkout from "./components/Checkout/Checkout";
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
       <Contact />
       <GetStarted />
       <Footer /> */}
+      <CartProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -41,10 +44,10 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register/>}></Route>
           <Route path="/borrow/:id" element={<BorrowPage />} />
-
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </Router>
-
+      </CartProvider>
     </div>
 
   );
