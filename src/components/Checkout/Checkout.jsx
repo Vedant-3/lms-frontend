@@ -1,15 +1,75 @@
 import React, { useContext } from "react";
 import "./Checkout.css";
 import { CartContext } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
 const Checkout = () => {
-  const { cart, removeFromCart, updateQuantity } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, clearCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const totalItems = cart.reduce((sum, book) => sum + book.quantity, 0);
   const totalPrice = cart.reduce(
     (sum, book) => sum + book.quantity * book.price,
     0
   );
+
+  const handleCheckout = async() => {
+    console.log(`handlecheckout called`);
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    if(!token || !userId) {
+      toast.error("User not authenticated");
+      return ;
+    }
+
+    try {
+      for(const book of cart) {
+        const {data} = await axios.get(
+          `http://localhost:8080/api/books/${book.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if(book.quantity > data.quantity) {
+          toast.error(`Quantity exceeds for ${book.title}`);
+          return ;
+        }
+        else {
+          console.log(`For Book ${book.title}, quantity is under limits`);
+        }
+      }
+
+      for(const book of cart) {
+        await axios.post(
+          "http://localhost:8080/api/loans",
+          {
+            userId, 
+            bookId: book.id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        toast.success(`Successfully checked out "${book.title}"`);
+      }
+
+      clearCart();
+
+      navigate("/checkout-success");
+    }
+    catch(err) {
+      console.error("Checkout failed", error);
+      toast.error("Checkout failed. Please try again.");
+    }
+  }
 
   return (
     <div className="checkout-container">
@@ -55,8 +115,10 @@ const Checkout = () => {
       <div className="checkout-summary">
         <p>Total Items: <strong>{totalItems}</strong></p>
         <p>Total Price: <strong>${totalPrice.toFixed(2)}</strong></p>
-        <button className="checkout-btn">Proceed to Checkout</button>
+        <button className="checkout-btn" onClick={handleCheckout}>Proceed to Checkout</button>
       </div>
+
+      <ToastContainer />  
     </div>
   );
 };

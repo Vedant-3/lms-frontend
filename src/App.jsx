@@ -20,6 +20,7 @@ import Register from "./pages/Register";
 import BorrowPage from "./pages/BorrowPage";
 import { CartProvider } from "./context/CartContext";
 import Checkout from "./components/Checkout/Checkout";
+import CheckoutSuccess from "./components/CheckoutSuccess/CheckoutSuccess";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/register" element={<Register/>}></Route>
           <Route path="/borrow/:id" element={<BorrowPage />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
         </Routes>
       </Router>
       </CartProvider>
