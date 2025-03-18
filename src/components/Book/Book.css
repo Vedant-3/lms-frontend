@@ -128,12 +128,13 @@
 }
 
 .show-more-btn {
-  background-color: #007bff;
+  background-color: #b0b8c2;
   color: white;
   padding: 12px;
   margin-top: 20px;
-  width: 100%;
   font-size: 16px;
+  display: block;
+  margin: 2rem auto;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -142,3 +143,5 @@
 .show-more-btn:hover {
   background-color: #0056b3;
 }
+
+

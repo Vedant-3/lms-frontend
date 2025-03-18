@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import Modal from "./Modal";    
 
+const DEFAULT_IMAGE = "../../../public/default-book.png";
 
 const Book = () => {
     const [books, setBooks] = useState([]);
@@ -14,11 +16,13 @@ const Book = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
     const { addToCart, cart } = useContext(CartContext);
+    const [selectedBook, setSelectedBook] = useState(null); // ✅ Track selected book for modal
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate(); // ✅ For navigation to checkout
 
     useEffect(() => {
         fetchBooks(page);
-    }, []);
+    }, []); 
 
     const fetchBooks = async (pageNumber) => {
         if (loading || pageNumber >= totalPages) return;
@@ -51,6 +55,10 @@ const Book = () => {
         }
     };
 
+    const handleImageError = (event) => {
+        event.target.src = DEFAULT_IMAGE;
+      };
+
     const handleAddToCart = (book) => {
         addToCart(book);
         // alert(`"${book.title}" has been added to your cart!`);
@@ -65,16 +73,32 @@ const Book = () => {
         });
     };
 
+    const handleOpenModal = async (bookId) => {
+        try {
+          const token = localStorage.getItem("token");
+          const { data } = await axios.get(`http://localhost:8080/api/books/${bookId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setSelectedBook(data);
+          setShowModal(true);
+        } catch (error) {
+          console.error("Failed to fetch book details", error);
+        }
+      };
+
     return (
         <div className="books-container">
             {/* ✅ Books Grid */}
             <div className="books-grid">
                 {books.map((book) => (
-                    <div key={book.id} className="book-card">
+                    <div key={book.id} className="book-card" onClick={() => handleOpenModal(book.id)}>
                         <img
                             src={book.imageUrl}
                             alt={book.title}
                             className="book-image"
+                            onError={handleImageError}
                         />
                         <div className="book-info">
                             <h3 className="book-title">{book.title}</h3>
@@ -88,7 +112,7 @@ const Book = () => {
                             </p>
                             <p
                                 className={`book-status ${
-                                    book.status === "Available"
+                                    book.status === "AVAILABLE"
                                         ? "available"
                                         : "unavailable"
                                 }`}
@@ -97,10 +121,10 @@ const Book = () => {
                             </p>
                             <button
                                 className="add-to-cart-btn"
-                                onClick={() => handleAddToCart(book)}
-                                disabled={book.status !== "Available"}
+                                onClick={(e) => {e.stopPropagation(); handleAddToCart(book)}}
+                                disabled={book.status !== "AVAILABLE"}
                             >
-                                {book.status === "Available"
+                                {book.status === "AVAILABLE"
                                     ? "Add to Cart"
                                     : "Out of Stock"}
                             </button>
@@ -128,6 +152,11 @@ const Book = () => {
                 >
                     Checkout ({cart.length} items)
                 </button>
+            )}
+
+            {/* ✅ Show Modal */}
+            {showModal && (
+                <Modal book={selectedBook} onClose={() => setShowModal(false)} />
             )}
 
             <ToastContainer />
