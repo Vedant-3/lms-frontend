@@ -1,139 +1,58 @@
-// import { useState, useEffect } from "react";
-// // import axios from "axios"; 
-// import "./GetAllBooks.css";
-// import { Link } from "react-router-dom";
-
-// const GetAllBooks = () => {
-//   const [books, setBooks] = useState([
-//     { id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", quantity: 1925 },
-//     { id: 2, title: "1984", author: "George Orwell", quantity: 1949 },
-//     { id: 3, title: "To Kill a Mockingbird", author: "Harper Lee", quantity: 1960 }
-//   ]);
-
-//   const [searchQuery, setSearchQuery] = useState("");
-
-//   // Uncomment below code when connecting to backend
-//   /*
-//   useEffect(() => {
-//     axios
-//       .get("http://localhost:5000/api/books") // Update with actual API endpoint
-//       .then((response) => {
-//         setBooks(response.data);
-//       })
-//       .catch((error) => {
-//         console.error("Error fetching books:", error);
-//       });
-//   }, []);
-//   */
-
-//   const handleDelete = (id) => {
-//     setBooks(books.filter(book => book.id !== id));
-
-//     // Uncomment below code when connecting to backend
-//     /*
-//     axios
-//       .delete(`http://localhost:5000/api/books/${id}`)
-//       .then(() => {
-//         setBooks(books.filter(book => book.id !== id));
-//       })
-//       .catch((error) => {
-//         console.error("Error deleting book:", error);
-//       });
-//     */
-//   };
-
-//   const handleEdit = (id) => {
-//     console.log(`Edit book with ID: ${id}`);
-//     alert("Edit functionality to be implemented!");
-//   };
-
-//   // Function to filter books based on search query
-//   const filteredBooks = books.filter((book) =>
-//     book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//     book.id.toString().includes(searchQuery)
-//   );
-
-//   return (
-//     <div className="books-container">
-//       <h2 className="title">All Books</h2>
-//       <Link to="/admin/add-book" className="add-book-link">+ Add a New Book</Link>
-//       {/* Search Bar */}
-//       <input
-//         type="text"
-//         placeholder="Search by Title or ID..."
-//         value={searchQuery}
-//         onChange={(e) => setSearchQuery(e.target.value)}
-//         className="search-bar"
-//       />
-
-//       <div className="book-list">
-//         {filteredBooks.length === 0 ? (
-//           <p className="no-books">No books found.</p>
-//         ) : (
-//           <ul>
-//             {filteredBooks.map((book) => (
-//               <li key={book.id} className="book-card">
-//                 <div className="book-info">
-//                   <p><strong>ID:</strong> {book.id}</p>
-//                   <p><strong>Title:</strong> {book.title}</p>
-//                   <p><strong>Author:</strong> {book.author}</p>
-//                   <p><strong>Quantity:</strong> {book.quantity}</p>
-//                 </div>
-//                 <div className="book-actions">
-//                   <button className="edit-btn" onClick={() => handleEdit(book.id)}>Edit</button>
-//                   <button className="delete-btn" onClick={() => handleDelete(book.id)}>Delete</button>
-//                 </div>
-//               </li>
-//             ))}
-//           </ul>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default GetAllBooks;
-
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./GetAllBooks.css"; // Import CSS file
 
 const GetAllBooks = () => {
     const navigate = useNavigate();
-    
-    const [books, setBooks] = useState([
-        {
-            id: 1,
-            title: "The Great Gatsby",
-            author: "F. Scott Fitzgerald",
-            genre: "Classic",
-            price: "$10",
-            quantity: 5,
-            image: "https://via.placeholder.com/100"
-        },
-        {
-            id: 2,
-            title: "1984",
-            author: "George Orwell",
-            genre: "Dystopian",
-            price: "$15",
-            quantity: 3,
-            image: "https://via.placeholder.com/100"
-        }
-    ]);
-
+    const [books, setBooks] = useState([]);
     const [deleteConfirm, setDeleteConfirm] = useState({ show: false, bookId: null });
     const [searchQuery, setSearchQuery] = useState("");
+
+    // Fetch books from backend
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await axios.get(
+                    "http://localhost:8080/api/books",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                console.log(response.data.content);
+                setBooks(response.data.content);
+            } catch (error) {
+                console.error("Error fetching books:", error);
+            }
+        };
+        fetchBooks();
+    }, []);
 
     // Handle Delete Confirmation
     const confirmDelete = (id) => {
         setDeleteConfirm({ show: true, bookId: id });
     };
 
-    const handleDelete = () => {
-        setBooks(books.filter(book => book.id !== deleteConfirm.bookId));
-        setDeleteConfirm({ show: false, bookId: null });
+    const handleDelete = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.delete(
+                `http://localhost:8080/api/books/${deleteConfirm.bookId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            setBooks(books.filter(book => book.id !== deleteConfirm.bookId));
+            setDeleteConfirm({ show: false, bookId: null });
+        } catch (error) {
+            console.error("Error deleting book:", error);
+        }
     };
 
     const handleEdit = (id) => {
@@ -166,7 +85,7 @@ const GetAllBooks = () => {
                 ) : (
                     filteredBooks.map((book) => (
                         <div key={book.id} className="book-card">
-                            <img src={book.image} alt={book.title} className="book-image" />
+                            <img src={book.imageUrl} alt={book.title} className="book-image" />
 
                             <div className="book-info">
                                 <p><strong>ID:</strong> {book.id}</p>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// import axios from "axios"; 
+import axios from "axios";
 import "./EditBook.css";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -10,59 +10,58 @@ const EditBook = () => {
     const navigate = useNavigate();
 
     const [book, setBook] = useState({
-        id: "",
         title: "",
         author: "",
-        imageUrl: "",
         genre: "",
         price: "",
-        quantity: ""
+        quantity: "",
+        image_url: "",
+        isbn: "",
     });
 
     // Fetch book details (Using sample data for now)
     useEffect(() => {
-        // Sample book data (Replace this with API call later)
-        const sampleBooks = [
-            { id: "1", title: "The Great Gatsby", author: "F. Scott Fitzgerald", genre: "Classic", price: "10", quantity: "5", imageUrl: "https://via.placeholder.com/100" },
-            { id: "2", title: "1984", author: "George Orwell", genre: "Dystopian", price: "15", quantity: "3", imageUrl: "https://via.placeholder.com/100" }
-        ];
-
-        const selectedBook = sampleBooks.find((book) => book.id === id);
-        if (selectedBook) {
-            setBook(selectedBook);
-        } else {
-            alert("Book not found!");
-            navigate("/admin");
+        const fetchBook = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await axios.get(
+                    `http://localhost:8080/api/books/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                setBook(response.data);
+            }
+            catch (err) {
+                console.log(err);
+            }
         }
+        fetchBook();
 
-        // Uncomment this when using API
-        /*
-        axios.get(`http://localhost:5000/api/books/${id}`)
-            .then(response => setBook(response.data))
-            .catch(error => {
-                console.error("Error fetching book:", error);
-                alert("Failed to load book details.");
-                navigate("/admin");
-            });
-        */
     }, [id, navigate]);
 
     // Handle input change
     const handleChange = (e) => {
         setBook({ ...book, [e.target.name]: e.target.value });
     };
-
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            // Uncomment when using API
-            /*
-            await axios.put(`http://localhost:5000/api/books/${id}`, book);
+            const token = localStorage.getItem("token");
+            const response = await axios.put(
+                `http://localhost:8080/api/books/${id}`, book,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            // await axios.put(`http://localhost:8080/api/books/${id}`, book);
             alert("Book updated successfully!");
-            */
-            navigate("/admin"); // Redirect to books list
+            navigate("/admin");
         } catch (error) {
             console.error("Error updating book:", error);
             alert("Failed to update book.");

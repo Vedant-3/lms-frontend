@@ -1,0 +1,28 @@
+.h-container {
+    justify-content: space-between;
+    padding-top: 1rem;
+    padding-bottom: 0.8rem;
+    /* color: var(--secondary); */
+    color: black;
+}
+
+.h-container img {
+    width: 8rem;
+}
+
+.h-menu {
+    gap: 2rem;
+    font-size: 1.2rem;
+}
+
+.h-menu>*:hover {
+    cursor: pointer;
+}
+
+.h-wrapper {
+    color: white;
+}
+
+.menu-icon {
+    display: none;
+}

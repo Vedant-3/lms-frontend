@@ -1,44 +1,67 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
-import './Register.css'
+import Header from "../components/Header/Header";
+import Footer from "../components/Footer/Footer";
+import "./Register.css";
 
 const Register = () => {
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
-    username: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
+    role: "PATRON", // Set default role as PATRON
   });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, username, email, password } = formData;
 
-    if (!name || !username || !email || !password) {
+    const { firstName, lastName, email, password, role } = formData;
+
+    if (!firstName || !lastName || !email || !password) {
       setError("All fields are required!");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long!");
-      return;
+      setError("Password must be atleast 6 characters long!");
     }
 
-    setError("");
-    console.log("User Registered:", formData);
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          role //Sending default role as PATRON
+        })
+      });
 
-    navigate("/login");
+      if (!response.ok) {
+        throw new Error('Failed to register');
+      }
+
+      setError("");
+      setSuccess('Registration successful! Redirecting to login...');
+      setTimeout(() => navigate('/login'), 1500);
+    }
+    catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -49,25 +72,26 @@ const Register = () => {
         <div className="register-box">
           <h2>Register</h2>
           {error && <p className="error-message">{error}</p>}
+          {success && <p className="success-message">{success}</p>}
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>Name</label>
+              <label>First Name</label>
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleChange}
-                placeholder="Enter your full name"
+                placeholder="Enter your first name"
               />
             </div>
             <div className="form-group">
-              <label>Username</label>
+              <label>Last Name</label>
               <input
                 type="text"
-                name="username"
-                value={formData.username}
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleChange}
-                placeholder="Choose a username"
+                placeholder="Enter your last name"
               />
             </div>
             <div className="form-group">
@@ -90,11 +114,16 @@ const Register = () => {
                 placeholder="Enter a password"
               />
             </div>
-            <button type="submit" className="register-button">Register</button>
+            <button type="submit" className="register-button">
+              Register
+            </button>
           </form>
           <p className="login-text">
             Already have an account?{" "}
-            <span className="login-link" onClick={() => navigate("/login")}>
+            <span
+              className="login-link"
+              onClick={() => navigate("/login")}
+            >
               Login
             </span>
           </p>
@@ -103,7 +132,7 @@ const Register = () => {
 
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
