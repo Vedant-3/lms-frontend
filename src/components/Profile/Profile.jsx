@@ -11,6 +11,7 @@ const Profile = () => {
   const [bookTitles, setBookTitles] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('books');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -89,54 +90,149 @@ const Profile = () => {
     return date.toLocaleDateString();
   };
 
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString();
+  // Calculate due date status
+  const getDueDate = (dueDate) => {
+    const now = new Date();
+    const due = new Date(dueDate);
+    const isOverdue = due < now;
+    const daysLeft = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+    
+    if (isOverdue) {
+      return (
+        <span className="due-date overdue">
+          <span className="clock-icon"></span>
+          {formatDate(dueDate)} ({Math.abs(daysLeft)} days overdue)
+        </span>
+      );
+    }
+    
+    return (
+      <span className="due-date">
+        <span className="clock-icon"></span>
+        {formatDate(dueDate)} ({daysLeft} days left)
+      </span>
+    );
   };
 
   if (loading) {
-    return <div className="profile-loading">Loading profile...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <p>Loading your profile...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="profile-error">{error}</div>;
+    return (
+      <div className="error-container">
+        <div className="error-content">
+          <div className="error-icon"></div>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()} className="btn-retry">
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
   }
 
+  // Calculate total unpaid fines
+  const totalUnpaidFines = fines
+    .filter(fine => fine.status === 'UNPAID')
+    .reduce((total, fine) => total + fine.amount, 0)
+    .toFixed(2);
+
   return (
-    <div className="profile-container">
+    <div className="profile-page">
+      {/* Header */}
       <div className="profile-header">
-        <h1>My Profile</h1>
+        <div className="header-content">
+          <div className="header-text">
+            <h1>My Profile</h1>
+            <p>Manage your books and account information</p>
+          </div>
+          <div className="header-actions">
+            <button className="btn-dashboard" onClick={() => navigate('/')}>
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
       </div>
 
-      {user && (
-        <div className="profile-details">
-          <div className="profile-section">
-            <h2>Personal Information</h2>
-            <div className="profile-info">
-              <div className="info-item">
-                <span className="info-label">Name:</span>
-                <span className="info-value">{user.firstName} {user.lastName}</span>
+      {/* Content */}
+      <div className="profile-content">
+        {/* User Info Card */}
+        <div className="user-card">
+          <div className="user-info">
+            <div className="user-avatar-section">
+              <div className="user-avatar">
+                <span className="user-icon"></span>
               </div>
-              <div className="info-item">
-                <span className="info-label">Email:</span>
-                <span className="info-value">{user.email}</span>
+              <h2>{user.firstName} {user.lastName}</h2>
+              <div className="user-email">
+                <span className="email-icon"></span>
+                <span>{user.email}</span>
               </div>
-              <div className="info-item">
-                <span className="info-label">Role:</span>
-                <span className="info-value">{user.role}</span>
+            </div>
+            <div className="user-details">
+              <div className="user-stats">
+                <div className="stat-group">
+                  <h3>Account Summary</h3>
+                  <div className="stat-item">
+                    <span className="stat-label">Member Since</span>
+                    <span className="stat-value">January 2024</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Role</span>
+                    <span className="stat-value capitalize">{user.role || 'Member'}</span>
+                  </div>
+                </div>
+                <div className="stat-group">
+                  <h3>Current Activity</h3>
+                  <div className="stat-item">
+                    <span className="stat-label">Books Borrowed</span>
+                    <span className="stat-value">{loans.filter(loan => loan.status === 'ACTIVE').length}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Outstanding Fines</span>
+                    <span className="stat-value fine-amount">${totalUnpaidFines}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="profile-section">
-            <h2>Borrowed Books</h2>
+        {/* Tabs Container */}
+        <div className="tabs-container">
+          <div className="tabs-header">
+            <button 
+              className={`tab-button ${activeTab === 'books' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('books')}
+            >
+              <span className="bookmark-icon"></span>
+              Borrowed Books
+            </button>
+            <button 
+              className={`tab-button ${activeTab === 'fines' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('fines')}
+            >
+              <span className="payment-icon"></span>
+              Fines
+            </button>
+          </div>
+
+          {/* Borrowed Books Tab */}
+          <div className={`tab-content ${activeTab === 'books' ? 'active' : ''}`}>
             {loans.length > 0 ? (
-              <div className="loans-table-container">
-                <table className="loans-table">
+              <div className="table-container">
+                <table className="data-table">
                   <thead>
                     <tr>
-                      <th>Loan ID</th>
-                      <th>Book Title</th>
+                      <th>Book</th>
                       <th>Checkout Date</th>
                       <th>Due Date</th>
                       <th>Status</th>
@@ -145,12 +241,23 @@ const Profile = () => {
                   <tbody>
                     {loans.map((loan) => (
                       <tr key={loan.id}>
-                        <td>{loan.id}</td>
-                        <td>{bookTitles[loan.bookId] || 'Loading...'}</td>
-                        <td>{formatDate(loan.checkoutDate)} {formatTime(loan.checkoutDate)}</td>
-                        <td>{formatDate(loan.dueDate)} {formatTime(loan.dueDate)}</td>
-                        <td className={loan.status === 'ACTIVE' ? 'status-active' : 'status-returned'}>
-                          {loan.status}     
+                        <td>
+                          <div className="book-info">
+                            <div className="book-icon">
+                              <span className="bookmark-icon"></span>
+                            </div>
+                            <div className="book-details">
+                              <div className="book-title">{bookTitles[loan.bookId] || 'Loading...'}</div>
+                              <div className="book-id">ID: {loan.bookId}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{formatDate(loan.checkoutDate)}</td>
+                        <td>{getDueDate(loan.dueDate)}</td>
+                        <td>
+                          <span className={`status-badge ${loan.status.toLowerCase()}`}>
+                            {loan.status}
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -158,43 +265,64 @@ const Profile = () => {
                 </table>
               </div>
             ) : (
-              <p className="no-loans">You haven't borrowed any books yet.</p>
+              <div className="empty-state">
+                <div className="empty-icon bookmark-icon-large"></div>
+                <h3>No books</h3>
+                <p>You haven't borrowed any books yet.</p>
+                <button className="btn-primary" onClick={() => navigate('/catalog')}>
+                  <span className="bookmark-icon"></span>
+                  Browse Catalog
+                </button>
+              </div>
             )}
           </div>
 
-          <div className="profile-section">
-            <h2>Fines</h2>
+          {/* Fines Tab */}
+          <div className={`tab-content ${activeTab === 'fines' ? 'active' : ''}`}>
             {fines.length > 0 ? (
-              <div className="fines-table-container">
-                <table className="fines-table">
+              <div className="table-container">
+                <table className="data-table">
                   <thead>
                     <tr>
-                      <th>Fine ID</th>
-                      <th>Loan ID</th>
-                      <th>Book Title</th>
+                      <th>Book</th>
                       <th>Amount</th>
                       <th>Status</th>
-                      <th>Action</th>
+                      <th className="text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {fines.map((fine) => (
                       <tr key={fine.id}>
-                        <td>{fine.id}</td>
-                        <td>{fine.loanInfo.id}</td>
-                        <td>{bookTitles[fine.loanInfo.bookId] || 'Loading...'}</td>
-                        <td>${fine.amount}</td>
-                        <td className={fine.status === 'PAID' ? 'status-paid' : 'status-unpaid'}>
-                          {fine.status}
-                        </td>
                         <td>
-                          {fine.status === 'UNPAID' && (
-                            <button 
-                              className="pay-button"
+                          <div className="book-info">
+                            <div className="fine-icon">
+                              <span className="alert-icon"></span>
+                            </div>
+                            <div className="book-details">
+                              <div className="book-title">{bookTitles[fine.loanInfo.bookId] || 'Loading...'}</div>
+                              <div className="book-id">Loan ID: {fine.loanInfo.id}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="fine-amount">${fine.amount.toFixed(2)}</td>
+                        <td>
+                          <span className={`status-badge ${fine.status.toLowerCase()}`}>
+                            {fine.status}
+                          </span>
+                        </td>
+                        <td className="text-right">
+                          {fine.status === 'UNPAID' ? (
+                            <button
+                              className="btn-pay"
                               onClick={() => navigate(`/payment/${fine.loanInfo.id}`)}
                             >
                               Pay Now
                             </button>
+                          ) : (
+                            <span className="payment-status">
+                              <span className="check-icon"></span>
+                              Paid
+                            </span>
                           )}
                         </td>
                       </tr>
@@ -203,11 +331,15 @@ const Profile = () => {
                 </table>
               </div>
             ) : (
-              <p className="no-fines">You don't have any outstanding fines.</p>
+              <div className="empty-state">
+                <div className="empty-icon check-icon-large"></div>
+                <h3>No fines</h3>
+                <p>You don't have any outstanding fines.</p>
+              </div>
             )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
