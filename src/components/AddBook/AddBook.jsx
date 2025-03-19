@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios"; 
+import axios from "axios";
 import "./AddBook.css";
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
-import { v4 as uuidv4 } from "uuid";
 
 const AddBook = () => {
     const navigate = useNavigate();
 
     const [book, setBook] = useState({
-        id: uuidv4(), // Auto-generate unique ID
         title: "",
         author: "",
-        imageUrl: "",
         genre: "",
-        price: "",
-        quantity: ""
+        price: 0,
+        quantity: 0,
+        image_url: "",
+        isbn: "",
     });
 
     // Handle input change
@@ -24,13 +23,22 @@ const AddBook = () => {
         setBook({ ...book, [e.target.name]: e.target.value });
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            //   await axios.post("http://localhost:5000/api/books", book); // Update API URL
-            //   alert("Book added successfully!");
+            const token = localStorage.getItem("token");
+            const response = await axios.post(
+                "http://localhost:8080/api/books",
+                book, // Pass the book object here
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            alert("Book added successfully!");
             navigate("/admin"); // Redirect to books list
         } catch (error) {
             console.error("Error adding book:", error);
@@ -51,7 +59,8 @@ const AddBook = () => {
                     <form className='page-form' onSubmit={handleSubmit}>
                         <input className='form-input' type="text" name="title" placeholder="Book Title" value={book.title} onChange={handleChange} required />
                         <input className='form-input' type="text" name="author" placeholder="Author" value={book.author} onChange={handleChange} required />
-                        <input className='form-input' type="text" name="imageUrl" placeholder="Image URL" value={book.imageUrl} onChange={handleChange} required />
+                        <input className='form-input' type="text" name="image_url" placeholder="Image URL" value={book.image_url} onChange={handleChange} required />
+                        <input className='form-input' type="text" name="isbn" placeholder="ISBN" value={book.isbn} onChange={handleChange} required />
                         <input className='form-input' type="text" name="genre" placeholder="Genre" value={book.genre} onChange={handleChange} required />
                         <input className='form-input' type="number" name="price" placeholder="Price" value={book.price} onChange={handleChange} required />
                         <input className='form-input' type="number" name="quantity" placeholder="Quantity" value={book.quantity} onChange={handleChange} required />

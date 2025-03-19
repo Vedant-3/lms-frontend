@@ -1,0 +1,70 @@
+.loans-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.loans-summary {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.summary-item h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.count {
+    font-size: 2em;
+    color: #333;
+}
+
+.loans-section {
+    margin-bottom: 20px;
+}
+
+.loans-section h3 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.loans-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.loan-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.loan-item:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+
+.loan-item p {
+    margin: 5px 0;
+}
+
+.loan-item strong {
+    color: #333;
+}

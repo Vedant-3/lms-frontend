@@ -1,18 +1,21 @@
 import React from 'react'
-import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
 import GetAllUsers from '../components/GetAllUsers/GetAllUsers'
 import GetAllBooks from '../components/GetAllBooks/GetAllBooks'
+import AdminHeader from '../components/AdminHeader/AdminHeader'
+import Loans from '../components/Loans/Loans'
 const AdminPanel = () => {
   return (
     <div>
-        <Header/>
+      <AdminHeader />
 
-        <GetAllUsers/>
+      <GetAllUsers />
 
-        <GetAllBooks/>
+      <GetAllBooks />
 
-        <Footer/>
+      <Loans />
+
+      <Footer />
     </div>
   )
 }

@@ -1,34 +1,141 @@
-import React from 'react'
-import Header from '../components/Header/Header'
-import Footer from '../components/Footer/Footer'
+// import React from 'react'
+// import Header from '../components/Header/Header'
+// import Footer from '../components/Footer/Footer'
 
-import { useState } from "react";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+
+// import './Login.css'
+
+
+// const Login = () => {
+//     const navigate = useNavigate() ;
+
+//     const [formData, setFormData] = useState({ username: "", password: "" });
+//     const [error, setError] = useState("");
+
+//     const handleChange = (e) => {
+//         setFormData({ ...formData, [e.target.name]: e.target.value });
+//     };
+
+//     const handleSubmit = (e) => {
+//         e.preventDefault();
+//         if (!formData.username || !formData.password) {
+//             setError("Username and password are required!");
+//             return;
+//         }
+//         setError("");
+//         console.log("Logging in with:", formData);
+//         // Perform login logic here
+//     };
+
+
+//     return (
+//         <div>
+//             <Header />
+
+//             <div className="login-container">
+//                 <div className="login-box">
+//                     <h2>Login</h2>
+//                     {error && <p className="error-message">{error}</p>}
+//                     <form onSubmit={handleSubmit}>
+//                         <div className="form-group">
+//                             <label>Username</label>
+//                             <input
+//                                 type="text"
+//                                 name="username"
+//                                 value={formData.username}
+//                                 onChange={handleChange}
+//                                 placeholder="Enter your username"
+//                             />
+//                         </div>
+//                         <div className="form-group">
+//                             <label>Password</label>
+//                             <input
+//                                 type="password"
+//                                 name="password"
+//                                 value={formData.password}
+//                                 onChange={handleChange}
+//                                 placeholder="Enter your password"
+//                             />
+//                         </div>
+//                         <button type="submit" className="login-button">Login</button>
+//                     </form>
+//                     <p className="register-text">
+//                         New here?{" "}
+//                         <span className="register-link" onClick={() => navigate("/register")}>
+//                             Register
+//                         </span>
+//                     </p>
+//                 </div>
+//             </div>
+
+//             <Footer />
+
+//         </div>
+//     )
+// }
+
+
+
+// export default Login
+
+
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import './Login.css'
-
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
+import './Login.css';
 
 const Login = () => {
-    const navigate = useNavigate() ;
+    const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({ username: "", password: "" });
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.username || !formData.password) {
-            setError("Username and password are required!");
+
+        const { email, password } = formData;
+
+        if (!email || !password) {
+            setError("Email and password are required!");
             return;
         }
-        setError("");
-        console.log("Logging in with:", formData);
-        // Perform login logic here
-    };
 
+        try {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            })
+
+            if (!response.ok) {
+                throw new Error('Invalid Credentials!');
+            }
+
+            const data = await response.json();
+            console.log("Login Successful: ", data);
+
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('role', data.role);
+            setSuccess("Login successful! Redirecting...");
+
+            setTimeout(() => navigate('/'), 1500);
+        }
+        catch (err) {
+            setError(err.message);
+        }
+    };
 
     return (
         <div>
@@ -38,15 +145,16 @@ const Login = () => {
                 <div className="login-box">
                     <h2>Login</h2>
                     {error && <p className="error-message">{error}</p>}
+                    {success && <p className="success-message">{success}</p>}
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Username</label>
+                            <label>Email</label>
                             <input
                                 type="text"
-                                name="username"
-                                value={formData.username}
+                                name="email"
+                                value={formData.email}
                                 onChange={handleChange}
-                                placeholder="Enter your username"
+                                placeholder="Enter your email"
                             />
                         </div>
                         <div className="form-group">
@@ -71,11 +179,8 @@ const Login = () => {
             </div>
 
             <Footer />
-
         </div>
-    )
-}
+    );
+};
 
-
-
-export default Login
+export default Login;

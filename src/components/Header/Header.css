@@ -1,23 +1,75 @@
- .h-container{
+.h-container {
     justify-content: space-between;
     padding-top: 1rem;
-    padding-bottom: 0.8rem;
+    padding-bottom: 1.5rem;
     /* color: var(--secondary); */
     color: black;
 }
-.h-container img{
+
+.h-container img {
     width: 8rem;
+    padding-left: 2.5%;
 }
-.h-menu{
-    gap : 2rem;
-    font-size: 1.2rem;
-} 
-.h-menu>*:hover{
+
+.h-menu {
+    gap: 2rem;
+    font-size: 1.1rem;
+    padding-right: 2%;
+}
+
+.h-menu>*:hover {
     cursor: pointer;
 }
-.h-wrapper{
-    color: white ;
+
+.h-wrapper {
+    color: white;
 }
-.menu-icon{
+
+.menu-icon {
     display: none;
+}
+
+
+.profile-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 120px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.profile-dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.profile-dropdown .dropdown-content a {
+    padding: 8px 12px;
+    display: block;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.profile-dropdown .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.button:hover {
+    background-color: #45a049;
 }

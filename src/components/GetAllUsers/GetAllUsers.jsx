@@ -1,92 +1,67 @@
-// import { useState, useEffect } from "react";
-// // import axios from "axios";
-// import "./GetAllUsers.css"; // Import the CSS file
-
-// const GetAllUsers = () => {
-//   const [users, setUsers] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-// //   useEffect(() => {
-// //     axios
-// //       .get("http://localhost:5000/api/users") // Update this with your API endpoint
-// //       .then((response) => {
-// //         setUsers(response.data);
-// //         setLoading(false);
-// //       })
-// //       .catch(() => {
-// //         setError("Failed to fetch users");
-// //         setLoading(false);
-// //       });
-// //   }, []);
-
-//   if (loading) return <p className="loading">Loading users...</p>;
-//   if (error) return <p className="error">{error}</p>;
-
-//   return (
-//     <div className="users-container">
-//       <h2 className="title">All Users</h2>
-//       <div className="user-list">
-//         {users.length === 0 ? (
-//           <p className="no-users">No users found.</p>
-//         ) : (
-//           <ul>
-//             {users.map((user) => (
-//               <li key={user.id} className="user-card">
-//                 <p><strong>Name:</strong> {user.name}</p>
-//                 <p><strong>Email:</strong> {user.email}</p>
-
-//                 <details className="borrowed-books">
-//                   <summary>Borrowed Books ({user.borrowedBooks.length})</summary>
-//                   <ul>
-//                     {user.borrowedBooks.length > 0 ? (
-//                       user.borrowedBooks.map((book, index) => (
-//                         <li key={index}>
-//                           {book.title} (Due: {book.dueDate})
-//                         </li>
-//                       ))
-//                     ) : (
-//                       <p className="no-books">No books borrowed.</p>
-//                     )}
-//                   </ul>
-//                 </details>
-//               </li>
-//             ))}
-//           </ul>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default GetAllUsers;
-
-
-
-import { useState } from "react";
-import "./GetAllUsers.css"; // Import CSS file
+import { useState, useEffect } from "react";
+import axios from "axios";
+import "./GetAllUsers.css";
 
 const GetAllUsers = () => {
-  // Sample users data (instead of fetching from API)
-  const [users] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      borrowedBooks: [
-        { title: "The Great Gatsby", dueDate: "2025-04-01" },
-        { title: "1984", dueDate: "2025-04-05" }
-      ]
-    },
-    {
-      id: 2,
-      name: "Alice Smith",
-      email: "alice@example.com",
-      borrowedBooks: []
-    }
-  ]);
-
+  const [users, setUsers] = useState([]);
+  const [borrowedBooks, setBorrowedBooks] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const fetchUsersAndLoans = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const usersResponse = await axios.get(
+          "http://localhost:8080/api/users",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setUsers(usersResponse.data);
+
+        // Fetch borrowed books for each user
+        const loansPromises = usersResponse.data.map(async (user) => {
+          const loansResponse = await axios.get(
+            `http://localhost:8080/api/loans/user/${user.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          // Fetch book details for each loan
+          const booksPromises = loansResponse.data.map(async (loan) => {
+            const bookResponse = await axios.get(
+              `http://localhost:8080/api/books/${loan.bookId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            return { ...loan, title: bookResponse.data.title };
+          });
+
+          const booksData = await Promise.all(booksPromises);
+          return { userId: user.id, loans: booksData };
+        });
+
+        const loansData = await Promise.all(loansPromises);
+        const loansMap = loansData.reduce((acc, { userId, loans }) => {
+          acc[userId] = loans;
+          return acc;
+        }, {});
+
+        setBorrowedBooks(loansMap);
+      } catch (error) {
+        console.error("Error fetching users or borrowed books:", error);
+      }
+    };
+    fetchUsersAndLoans();
+  }, []);
 
   // Function to filter users based on search query
   const filteredUsers = users.filter((user) =>
@@ -114,21 +89,21 @@ const GetAllUsers = () => {
           <ul>
             {filteredUsers.map((user) => (
               <li key={user.id} className="user-card">
-                {/* Name and Email in the same line */}
                 <div className="user-info">
                   <p><strong>ID:</strong> {user.id}</p>
-                  <p><strong>Name:</strong> {user.name}</p>
+                  <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
                   <p><strong>Email:</strong> {user.email}</p>
                 </div>
 
                 {/* Borrowed Books Section */}
                 <details className="borrowed-books">
-                  <summary>Borrowed Books ({user.borrowedBooks.length})</summary>
-                  <ul>
-                    {user.borrowedBooks.length > 0 ? (
-                      user.borrowedBooks.map((book, index) => (
-                        <li key={index}>
-                          {book.title} (Due: {book.dueDate})
+                  <summary>Borrowed Books ({borrowedBooks[user.id]?.length || 0})</summary>
+                  <ul className="borrowed-books-list">
+                    {borrowedBooks[user.id]?.length > 0 ? (
+                      borrowedBooks[user.id].map((loan, index) => (
+                        <li key={index} className="borrowed-book-item">
+                          <span className="book-title">{loan.title}</span>
+                          <span className="due-date">(Due: {loan.dueDate.slice(0, 10)})</span>
                         </li>
                       ))
                     ) : (
@@ -146,4 +121,3 @@ const GetAllUsers = () => {
 };
 
 export default GetAllUsers;
-
