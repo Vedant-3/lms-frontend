@@ -1,6 +1,5 @@
 import Header from "./components/Header/Header";
 import Hero from "./components/Hero/Hero";
-import Companies from "./components/Companies/Companies"
 import Residencies from "./components/Residencies/Residencies";
 import Value from "./components/Value/Value"
 import Contact from "./components/Contact/Contact";
@@ -21,6 +20,8 @@ import BorrowPage from "./pages/BorrowPage";
 import { CartProvider } from "./context/CartContext";
 import Checkout from "./components/Checkout/Checkout";
 import CheckoutSuccess from "./components/CheckoutSuccess/CheckoutSuccess";
+import Profile from "./components/Profile/Profile";
+import Payment from "./components/Payment/Payment";
 
 function App() {
   return (
@@ -47,6 +48,8 @@ function App() {
           <Route path="/borrow/:id" element={<BorrowPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout-success" element={<CheckoutSuccess />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/payment/:loanId" element={<Payment />} />
         </Routes>
       </Router>
       </CartProvider>

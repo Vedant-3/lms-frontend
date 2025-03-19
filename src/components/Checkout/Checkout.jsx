@@ -16,7 +16,6 @@ const Checkout = () => {
   );
 
   const handleCheckout = async() => {
-    console.log(`handlecheckout called`);
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
 
@@ -46,18 +45,20 @@ const Checkout = () => {
       }
 
       for(const book of cart) {
-        await axios.post(
-          "http://localhost:8080/api/loans",
-          {
-            userId, 
-            bookId: book.id,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
+        for(let i=0; i<book.quantity; i++) {
+          await axios.post(
+            "http://localhost:8080/api/loans",
+            {
+              userId, 
+              bookId: book.id,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        }
         toast.success(`Successfully checked out "${book.title}"`);
       }
 

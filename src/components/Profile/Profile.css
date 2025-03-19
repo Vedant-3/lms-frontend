@@ -1,0 +1,148 @@
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .profile-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .profile-header h1 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .profile-section {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+  }
+  
+  .profile-section h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .info-label {
+    font-weight: bold;
+    width: 100px;
+  }
+  
+  .info-value {
+    flex: 1;
+  }
+  
+  .loans-table-container,
+  .fines-table-container {
+    overflow-x: auto;
+  }
+  
+  .loans-table,
+  .fines-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .loans-table th,
+  .fines-table th {
+    background-color: #f5f5f5;
+    padding: 0.75rem;
+    text-align: left;
+  }
+  
+  .loans-table td,
+  .fines-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .status-active {
+    color: #2c73d2;
+    font-weight: bold;
+  }
+  
+  .status-returned {
+    color: #4caf50;
+  }
+  
+  .status-paid {
+    color: #4caf50;
+  }
+  
+  .status-unpaid {
+    color: #f44336;
+    font-weight: bold;
+  }
+  
+  .pay-button {
+    background-color: #2c73d2;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pay-button:hover {
+    background-color: #1e5aa0;
+  }
+  
+  .no-loans,
+  .no-fines {
+    color: #666;
+    font-style: italic;
+  }
+  
+  .profile-loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  
+  .profile-error {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #f44336;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 1rem;
+    }
+    
+    .info-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+    
+    .info-label {
+      width: auto;
+    }
+  }
