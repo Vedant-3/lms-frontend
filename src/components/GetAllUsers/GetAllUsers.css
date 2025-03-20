@@ -1,100 +1,93 @@
 .users-container {
-  max-width: 800px;
-  margin: 20px auto;
   padding: 20px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .title {
-  text-align: center;
   font-size: 24px;
   margin-bottom: 20px;
-}
-
-.user-list {
-  list-style: none;
-  padding: 0;
-}
-
-.user-card {
-  background: white;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Flexbox for Name and Email on the same line */
-.user-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: start;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.borrowed-books summary {
-  font-weight: bold;
-  color: #007bff;
-  cursor: pointer;
-  margin-top: 8px;
-}
-
-.borrowed-books ul {
-  padding-left: 20px;
-  margin-top: 5px;
-}
-
-.no-users,
-.no-books {
-  color: #666;
 }
 
 .search-bar {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  margin-bottom: 20px;
   font-size: 16px;
+}
+
+.user-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-card {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.user-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info {
+  flex-grow: 1;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #ff1a1a;
+}
+
+.borrowed-books {
+  margin-top: 10px;
+}
+
+.borrowed-books summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #007bff;
 }
 
 .borrowed-books-list {
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin-top: 10px;
 }
 
 .borrowed-book-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-.borrowed-book-item:nth-child(odd) {
-  background-color: #f1f1f1;
+  padding: 5px 0;
 }
 
 .book-title {
   font-weight: bold;
-  color: #333;
+  color: #007bff;
 }
 
 .due-date {
-  font-style: italic;
-  color: #666;
+  color: #888;
 }
 
-.no-books {
-  color: #999;
-  font-style: italic;
-  text-align: center;
+.borrowed-books summary:hover {
+  text-decoration: underline;
+}
+
+.borrowed-book-item .book-title {
+  color: #007bff;
+}
+
+.borrowed-book-item .due-date {
+  color: #555;
 }

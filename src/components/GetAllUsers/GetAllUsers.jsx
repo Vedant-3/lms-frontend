@@ -32,8 +32,13 @@ const GetAllUsers = () => {
             }
           );
 
-          // Fetch book details for each loan
-          const booksPromises = loansResponse.data.map(async (loan) => {
+          // Filter loans to include only those with status "ACTIVE"
+          const activeLoans = loansResponse.data.filter(
+            (loan) => loan.status === "ACTIVE"
+          );
+
+          // Fetch book details for each active loan
+          const booksPromises = activeLoans.map(async (loan) => {
             const bookResponse = await axios.get(
               `http://localhost:8080/api/books/${loan.bookId}`,
               {
@@ -63,6 +68,25 @@ const GetAllUsers = () => {
     fetchUsersAndLoans();
   }, []);
 
+  const deleteUser = async (userId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:8080/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUsers(users.filter((user) => user.id !== userId));
+      setBorrowedBooks((prev) => {
+        const updated = { ...prev };
+        delete updated[userId];
+        return updated;
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   // Function to filter users based on search query
   const filteredUsers = users.filter((user) =>
     user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -89,10 +113,18 @@ const GetAllUsers = () => {
           <ul>
             {filteredUsers.map((user) => (
               <li key={user.id} className="user-card">
-                <div className="user-info">
-                  <p><strong>ID:</strong> {user.id}</p>
-                  <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
-                  <p><strong>Email:</strong> {user.email}</p>
+                <div className="user-details">
+                  <div className="user-info">
+                    <p><strong>ID:</strong> {user.id}</p>
+                    <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+                    <p><strong>Email:</strong> {user.email}</p>
+                  </div>
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteUser(user.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
 
                 {/* Borrowed Books Section */}
